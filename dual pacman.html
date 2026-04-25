@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Pac-man</title>
+		<style>
+			canvas {
+			    background-color: lightgrey; /* Даємо ледь сірий фон, щоб краще було видно жовтого пакмена */
+			}
+            body{
+                background: blue;
+            }
+		</style>
+	</head>
+	<body>
+		<canvas id="canvas" width="400" height="400"></canvas>
+		<
+		<!-- Визначаємо канвас для гри -->
+		<script>
+			const canvas = document.getElementById("canvas"); // Отримуємо елемент canvas
+			const ctx = canvas.getContext("2d"); // Отримуємо контекст для малювання на canvas
+
+			const cellSize = 40; // Розмір клітинки в лабіринті
+			const rows = 10; // Кількість рядків в лабіринті
+			const cols = 10; // Кількість стовпців в лабіринті
+            let score = 0
+            let fruits = []
+
+			// Лабіринт: 0 - вільний простір, 1 - стіна
+			const maze = [
+				[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+				[1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+				[1, 0, 1, 1, 0, 1, 1, 1, 0, 1],
+				[1, 0, 1, 0, 0, 0, 1, 0, 0, 1],
+				[1, 0, 1, 1, 1, 0, 1, 1, 0, 1],
+				[1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+				[1, 0, 1, 0, 1, 1, 1, 0, 1, 1],
+				[1, 0, 0, 0, 1, 1, 0, 0, 1, 1],
+				[1, 1, 1, 0, 0, 0, 0, 1, 1, 1],
+				[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+			];
+
+			let pacman = {
+				x: 1 * cellSize + cellSize / 2, // Початкові координати Pac-Man (центр клітинки)
+				y: 1 * cellSize + cellSize / 2,
+				radius: 15, // Розмір Pac-Man
+				direction: "right", // Початковий напрямок руху (право)
+				speed: cellSize, // Швидкість руху, рівна розміру клітинки
+			};
+            let clone = {
+				x: 3 * cellSize + cellSize / 2, // Початкові координати Pac-Man (центр клітинки)
+				y: 3 * cellSize + cellSize / 2,
+				radius: 15, // Розмір Pac-Man
+				direction: "right", // Початковий напрямок руху (право)
+				speed: cellSize, // Швидкість руху, рівна розміру клітинки
+			};
+
+			// Функція для малювання лабіринту
+			function drawMaze() {
+				for (let row = 0; row < rows; row++) {
+					for (let col = 0; col < cols; col++) {
+						if (maze[row][col] === 1) {
+							ctx.fillStyle = "blue"; // Колір стін
+							ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize); // Малюємо стіну
+						}
+					}
+				}
+			}
+            function colision(){
+                if (pacman.x === clone.x && pacman.y === clone.y){
+                    alert(`gameover, score:${score}`)
+                    location.reload()
+                }
+            }
+            function drawf(){
+                fruits.forEach(f => {
+                    ctx.beginPath()
+                    ctx.arc(f.x,f.y,6,0,2*Math.PI)
+                    ctx.fillStyle="lime"
+                    ctx.fill()
+                });
+            }
+            
+            function fcolision() {
+    for (let i = fruits.length - 1; i >= 0; i--) {
+        let f = fruits[i];
+
+        if (pacman.x === f.x && pacman.y === f.y) {
+            score++;
+            fruits.splice(i, 1);
+        }
+
+        if (clone.x === f.x && clone.y === f.y) {
+            score--;
+            fruits.splice(i, 1);
+        }
+    }
+}
+
+			// Функція для малювання Pac-Man
+			function drawPacman() {
+				ctx.beginPath(); // Початок малювання фігури
+
+				// Початкові кути для відкриття рота (право)
+				let startAngle = 0.25 * Math.PI;
+				let endAngle = 1.75 * Math.PI;
+
+				// Якщо напрямок вліво, змінюємо кути відкриття рота
+				if (pacman.direction === "left") {
+					startAngle = Math.PI + 0.25 * Math.PI;
+					endAngle = Math.PI + 1.75 * Math.PI;
+				}
+
+				// Малюємо Pac-Man з вказаними кутами
+				ctx.arc(pacman.x, pacman.y, pacman.radius, startAngle, endAngle);
+				ctx.lineTo(pacman.x, pacman.y); // Завершуємо шлях до центру
+				ctx.fillStyle = "yellow"; // Колір Pac-Man
+				ctx.fill(); // Заповнюємо фігуру
+				ctx.closePath(); // Завершуємо малювання
+
+				// Малюємо око
+				const eyeX = pacman.direction === "left" ? pacman.x + 5 : pacman.x - 5; // Око змінює свою позицію в залежності від напрямку
+				const eyeY = pacman.y - 5;
+				const eyeRadius = 3; // Розмір ока
+
+				// Малюємо око
+				ctx.beginPath();
+				ctx.arc(eyeX, eyeY, eyeRadius, 0, 2 * Math.PI);
+				ctx.fillStyle = "black"; // Колір ока
+				ctx.fill(); // Заповнюємо око
+				ctx.closePath(); // Завершуємо малювання ока
+			}
+
+            function drawclone() {
+				ctx.beginPath(); // Початок малювання фігури
+
+				// Початкові кути для відкриття рота (право)
+				let startAngle = 0.30 * Math.PI;
+				let endAngle = 1.70 * Math.PI;
+
+				// Якщо напрямок вліво, змінюємо кути відкриття рота
+				if (pacman.direction === "left") {
+					startAngle = Math.PI + 0.30 * Math.PI;
+					endAngle = Math.PI + 1.70 * Math.PI;
+				}
+
+				// Малюємо Pac-Man з вказаними кутами
+				ctx.arc(clone.x, clone.y, clone.radius, startAngle, endAngle);
+				ctx.lineTo(clone.x, clone.y); // Завершуємо шлях до центру
+				ctx.fillStyle = "red"; // Колір Pac-Man
+				ctx.fill(); // Заповнюємо фігуру
+				ctx.closePath(); // Завершуємо малювання
+
+				// Малюємо око
+				const eyeX = pacman.direction === "left" ? clone.x + 5 : clone.x - 5; // Око змінює свою позицію в залежності від напрямку
+				const eyeY = clone.y - 5;
+				const eyeRadius = 3; // Розмір ока
+
+				// Малюємо око
+				ctx.beginPath();
+				ctx.arc(eyeX, eyeY, eyeRadius, 0, 2 * Math.PI);
+				ctx.fillStyle = "black"; // Колір ока
+				ctx.fill(); // Заповнюємо око
+				ctx.closePath(); // Завершуємо малювання ока
+			}
+
+			// Функція для перевірки, чи можна зробити рух в нову позицію
+			function isValidMove(newX, newY) {
+				const gridX = Math.floor(newX / cellSize); // Переводимо координати в клітинки лабіринту
+				const gridY = Math.floor(newY / cellSize);
+				return maze[gridY] && maze[gridY][gridX] === 0; // Перевіряємо, чи клітинка не є стіною
+			}
+            function isValidcMove(newcX, newcY) {
+				const gridX = Math.floor(newcX / cellSize); // Переводимо координати в клітинки лабіринту
+				const gridY = Math.floor(newcY / cellSize);
+				return maze[gridY] && maze[gridY][gridX] === 0; // Перевіряємо, чи клітинка не є стіною
+			}
+
+			// Оновлення гри
+			function update() {
+				ctx.clearRect(0, 0, canvas.width, canvas.height); // Очищаємо канвас
+				drawMaze(); // Малюємо лабіринт
+				drawPacman(); // Малюємо Pac-Man
+				drawclone(); // Малюємо Pac-Man
+                drawf();
+
+                colision()
+                fcolision()
+
+				// Рух Pac-Man, залежно від напрямку
+				let newX = pacman.x;
+				let newY = pacman.y;
+				let newcX = clone.x;
+				let newcY = clone.y;
+
+				if (pacman.direction === "right") newX += pacman.speed; // Рух вправо
+				if (pacman.direction === "left") newX -= pacman.speed; // Рух вліво
+				if (pacman.direction === "up") newY -= pacman.speed; // Рух вгору
+				if (pacman.direction === "down") newY += pacman.speed; // Рух вниз
+                if (clone.direction === "right") newcX += clone.speed; // Рух вправо
+				if (clone.direction === "left") newcX -= clone.speed; // Рух вліво
+				if (clone.direction === "up") newcY -= clone.speed; // Рух вгору
+				if (clone.direction === "down") newcY += clone.speed; // Рух вниз
+
+				// Перевіряємо, чи можна перемістити Pac-Man в нову позицію
+				if (isValidMove(newX, newY)) {
+					pacman.x = newX; // Оновлюємо координати
+					pacman.y = newY;
+				}
+                if (isValidcMove(newcX, newcY)) {
+					clone.x = newcX; // Оновлюємо координати
+					clone.y = newcY;
+				}
+			}
+
+			// Обробник клавіш для зміни напрямку руху
+			document.addEventListener("keydown", function (event) {
+				if (event.key === "ArrowRight") pacman.direction = "right"; // Якщо натиснута стрілка вправо
+				if (event.key === "ArrowLeft") pacman.direction = "left"; // Якщо натиснута стрілка вліво
+				if (event.key === "ArrowUp") pacman.direction = "up"; // Якщо натиснута стрілка вгору
+				if (event.key === "ArrowDown") pacman.direction = "down"; // Якщо натиснута стрілка вниз
+                if (event.key === "ArrowRight") clone.direction = "right"; // Якщо натиснута стрілка вправо
+				if (event.key === "ArrowLeft") clone.direction = "left"; // Якщо натиснута стрілка вліво
+				if (event.key === "ArrowUp") clone.direction = "up"; // Якщо натиснута стрілка вгору
+				if (event.key === "ArrowDown") clone.direction = "down"; // Якщо натиснута стрілка вниз
+			});
+setInterval(update, 100);
+			setInterval(() => {
+    let x, y;
+
+    do {
+        x = Math.floor(Math.random() * cols);
+        y = Math.floor(Math.random() * rows);
+    } while (maze[y][x] !== 0);
+
+    fruits.push({
+        x: x * cellSize + cellSize / 2,
+        y: y * cellSize + cellSize / 2
+    });
+}, 10000);
+		</script>
+	</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>runner</title>
+	<style>
+		canvas{
+			border: 2px solid black;
+			background: url(data:image/png;base64,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);
+		}
+		
+	</style>
+</head>
+<body>
+	<canvas width="1500" height="500" id="canv"></canvas>
+	<h1 id="score">Score: 0</h1>
+</body>
+<script>
+	const canvas = document.getElementById("canv");
+	const ctx = canvas.getContext("2d");
+	const cellSize = 50;
+	let walls = []
+	let px = 50
+	let py = 50
+	let wx = 0
+	let wy = 50
+	let gameover = false
+	let scoreEl = document.getElementById("score");
+	let score = 0;
+	let bullets = [];
+	let ammo = 3;
+	let hp = 3;
+	let medkits = [];
+	const bulletSize = 30;
+	let reloading = false;
+	const wallImg = new Image();
+	wallImg.src = "asteroid.png";
+	ctx.imageSmoothingEnabled = false;
+	const playerImg = new Image();
+	playerImg.src = "player.png";
+	const bulletImg = new Image();
+	bulletImg.src = "bullet.gif";
+	const medkitImg = new Image();
+medkitImg.src = "repair.png";
+
+
+	function drawp(){
+    let size = cellSize * 1.2;
+    let offset = (cellSize - size) / 2;
+
+    ctx.drawImage(playerImg, px + offset, py + offset, size, size);
+}
+
+	function draww(){
+    for (let i = 0; i < walls.length; i++) {
+        ctx.drawImage(wallImg, walls[i].wx, walls[i].wy, cellSize, cellSize);
+    }
+}
+function drawBullets(){
+    for (let b of bullets){
+        if (b.justSpawned) continue;
+
+        ctx.drawImage(
+            bulletImg,
+            b.x - 15,
+            b.y - 15,
+            30,
+            30
+        );
+    }
+}
+function drawMedkits(){
+    for (let m of medkits){
+        ctx.drawImage(medkitImg, m.x, m.y, cellSize, cellSize);
+    }
+}
+
+	function movew(){
+		for (let i = 0; i < walls.length; i++) {
+		walls[i].wx -= cellSize/2;
+	}walls = walls.filter(w => w.wx >= 0);
+	}
+	function moveBullets(){
+    for (let b of bullets){
+        b.x += 20;
+
+        if (b.justSpawned){
+            b.justSpawned = false;
+        }
+    }
+}
+function moveMedkits(){
+    for (let m of medkits){
+        m.x -= cellSize / 2;
+    }
+    medkits = medkits.filter(m => m.x >= 0);
+}
+	let wall = {
+		wx:canvas.width - cellSize,
+		wy:0
+	}
+
+	function spawnw(){
+    let wy = Math.floor(Math.random() * (canvas.height / cellSize)) * cellSize;
+
+    if (wy === py) return;
+
+    walls.push({
+        wx: canvas.width - cellSize,
+        wy: wy
+    });
+}
+
+function spawnMedkit(){
+    if (hp >= 3) return;
+
+    medkits.push({
+        x: canvas.width - cellSize,
+        y: Math.floor(Math.random() * (canvas.height / cellSize)) * cellSize
+    });
+}
+
+	function colision(){
+    for (let i = walls.length - 1; i >= 0; i--) {
+        let w = walls[i];
+
+        if (
+            px < w.wx + cellSize &&
+            px + cellSize > w.wx &&
+            py < w.wy + cellSize &&
+            py + cellSize > w.wy
+        ){
+            walls.splice(i, 1);
+            hp--;
+
+            if (hp <= 0){
+                gameover = true;
+            }
+
+            break;
+        }
+    }
+}
+	function bulletCollision(){
+    bullets = bullets.filter(b => {
+        for (let w of walls){
+            if (
+                b.x < w.wx + cellSize &&
+                b.x + bulletSize > w.wx &&
+                b.y < w.wy + cellSize &&
+                b.y + bulletSize > w.wy
+            ){
+                walls.splice(walls.indexOf(w), 1);
+                score += 50;
+                return false;
+            }
+        }
+        return true;
+    });
+}
+function medkitCollision(){
+    for (let i = 0; i < medkits.length; i++){
+        let m = medkits[i];
+
+        if (
+            px < m.x + cellSize &&
+            px + cellSize > m.x &&
+            py < m.y + cellSize &&
+            py + cellSize > m.y
+        ){
+            medkits.splice(i, 1);
+            hp++;
+        }
+    }
+}
+function reload(){
+    if (ammo <= 0 && !reloading){
+        reloading = true;
+        setTimeout(() => {
+            ammo = 3;
+            reloading = false;
+        }, 5000);
+    }
+}
+
+	function update(){
+    if (gameover) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    movew();
+    moveBullets();
+    moveMedkits();
+
+    colision();
+    bulletCollision();
+    medkitCollision();
+
+    draww();
+    drawMedkits();
+    drawBullets();
+    drawp();
+
+    reload();
+
+    if (!gameover) score++;
+
+    scoreEl.textContent = `Score: ${score} | HP: ${hp} | Ammo: ${ammo}`;
+}
+
+	document.addEventListener("keydown", function (event) {
+    if (event.key === "ArrowRight" && ammo > 0) {
+        bullets.push({
+    x: px + cellSize / 2,
+    y: py + cellSize / 2,
+    justSpawned: true
+});
+        ammo--;
+    }
+});
+	document.addEventListener("keydown", function (event) {
+				if (event.key === "ArrowUp" && py > 0) py -= 50;
+				if (event.key === "ArrowDown" && py + cellSize < canvas.height) py += 50;
+	});
+
+setInterval(update, 100);
+setInterval(spawnw, 200);
+setInterval(spawnw, 400);
+setInterval(spawnw, 800);
+setInterval(spawnMedkit, 10000);
+</script>
+</html>
