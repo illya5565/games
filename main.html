@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Ігри</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 50px;
+            font-size: 40px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            width: 200px;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            background: #ff7e5f;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #feb47b;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎮 Обери свою гру</h1>
+
+    <div class="container">
+        <div class="card">
+            <h2>RTS</h2>
+            <a href="rts/autopowder.html" target="_blank" class="btn">Грати</a>
+        </div>
+
+        <div class="card">
+            <h2>Asteroid</h2>
+            <a href="asteroid.html" target="_blank" class="btn">Грати</a>
+        </div>
+
+        <div class="card">
+            <h2>dual pacman</h2>
+            <a href="dual pacman.html" target="_blank" class="btn">Грати</a>
+        </div>
+    </div>
+
+</body>
+</html>
